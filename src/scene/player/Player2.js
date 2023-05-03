@@ -1,4 +1,4 @@
-projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, players) {
+projekt.scene.Player2 = function (x, y, width, height, resource, boxes, gamepad, players) {
 
     rune.display.Sprite.call(this, x, y, width, height, resource);
 
@@ -9,7 +9,7 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     this.boxes = boxes
     this.velocity.y = 0;
     this.minY = 205;
-    this.alive = true; 
+    this.alive = true;
     this.gamepad = gamepad;
     this.players = players;
     console.log(this.players);
@@ -18,23 +18,23 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     this.canJump = true;
 }
 
-projekt.scene.Player.prototype = Object.create(rune.display.Sprite.prototype);
-projekt.scene.Player.prototype.constructor = projekt.scene.Player;
+projekt.scene.Player2.prototype = Object.create(rune.display.Sprite.prototype);
+projekt.scene.Player2.prototype.constructor = projekt.scene.Player2;
 
 
 
 
 
-projekt.scene.Player.prototype.setAnimation = function () {
+projekt.scene.Player2.prototype.setAnimation = function () {
     this.animation.create("idle", [0, 1], 4, true);
     this.animation.create("run", [0, 1, 2, 3, 4, 5, 6, 7, 8], 15, true);
     this.animation.create("death", [9, 10, 11], 1, true);
-    this.animation.create("punch", [12], 1, true );
+    this.animation.create("punch", [12], 1, true);
 
 }
 
 
-projekt.scene.Player.prototype.checkWalkCollisionRight = function () {
+projekt.scene.Player2.prototype.checkWalkCollisionRight = function () {
 
     this.boxes.forEachMember(function (box) {
         if (this.right >= box.left && this.bottom >= box.top + 2 && this.top <= box.bottom && this.right <= box.left + 3) {
@@ -43,7 +43,7 @@ projekt.scene.Player.prototype.checkWalkCollisionRight = function () {
     }, this)
 }
 
-projekt.scene.Player.prototype.checkWalkCollisionLeft = function () {
+projekt.scene.Player2.prototype.checkWalkCollisionLeft = function () {
     this.boxes.forEachMember(function (box) {
         if (this.left <= box.right && this.bottom >= box.top + 2 && this.top <= box.bottom && this.left >= box.right - 3) {
             this.left = box.right + 3;
@@ -51,57 +51,57 @@ projekt.scene.Player.prototype.checkWalkCollisionLeft = function () {
     }, this)
 }
 
- projekt.scene.Player.prototype.checkCrushCollision = function () {
+projekt.scene.Player2.prototype.checkCrushCollision = function () {
 
-     this.boxes.forEachMember(function(box){
-        this.hitTest(box, function(){
-            if(this.top >= box.top + box.height - 5 && this.top <= box.top + box.height + 5 && this.x < box.x + box.width - 5 && this.x + this.width > box.x + 5
-                ){
-          
-            this.animation.gotoAndPlay("death");
-            this.alive = false;
-            this.bottom = box.top +1;
-            this.gravity = -0.1;
-            this.velocity.y = -0.5;
-            
+    this.boxes.forEachMember(function (box) {
+        this.hitTest(box, function () {
+            if (this.top >= box.top + box.height - 5 && this.top <= box.top + box.height + 5 && this.x < box.x + box.width - 5 && this.x + this.width > box.x + 5
+            ) {
+
+                this.animation.gotoAndPlay("death");
+                this.alive = false;
+                this.bottom = box.top;
+                this.gravity = -0.1;
+                this.velocity.y = -0.5;
+
             }
-        },this)
-     },this)
- }
+        }, this)
+    }, this)
+}
 
 
 
 
 
- projekt.scene.Player.prototype.checkCollision = function () {
-     this.boxes.forEachMember(function (box) {
-         this.hitTest(box, function () {
-             if (this.top < box.top && this.x < box.x + box.width - 5 && this.x + this.width > box.x + 5) {
-                 this.velocity.y = 0;
-                 this.bottom = box.top;
-                 this.canJump = true;
-             }
-         }, this);
-     }, this)
- }
+projekt.scene.Player2.prototype.checkCollision = function () {
+    this.boxes.forEachMember(function (box) {
+        this.hitTest(box, function () {
+            if (this.top < box.top && this.x < box.x + box.width - 5 && this.x + this.width > box.x + 5) {
+                this.velocity.y = 0;
+                this.bottom = box.top +1;
+                this.canJump = true;
+            }
+        }, this);
+    }, this)
+}
 
 
 
 
-projekt.scene.Player.prototype.checkOnGround = function(){
+projekt.scene.Player2.prototype.checkOnGround = function () {
 
-    if(this.y == 205 || this.y == 204){
+    if (this.y == 205 || this.y == 204) {
         this.canJump = true;
     }
 }
 
-projekt.scene.Player.prototype.update = function (step) {
+projekt.scene.Player2.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
     if (this.alive == true) {
-    this.checkCollision();
-    this.checkCrushCollision();
-    this.checkOnGround();
+        this.checkCollision();
+        this.checkCrushCollision();
+        this.checkOnGround();
 
 
         var walking = false;
@@ -110,22 +110,22 @@ projekt.scene.Player.prototype.update = function (step) {
         //this.checkCrushCollision();
 
 
-      
+
         if (this.y > this.minY) {
             this.y = this.minY;
         }
 
-       
 
 
-        if(this.gamepad.pressed(2)){
+
+        if (this.keyboard.pressed("F")) {
             punching = true;
             this.animation.gotoAndPlay("punch");
-            
+
         }
 
 
-        if (this.gamepad.stickLeftRight) {
+        if (this.keyboard.pressed("D")) {
             if (this.x < 380) {
                 this.checkWalkCollisionRight();
                 this.x += this.speed;
@@ -135,7 +135,7 @@ projekt.scene.Player.prototype.update = function (step) {
 
         }
 
-        if (this.gamepad.stickLeftLeft) {
+        if (this.keyboard.pressed("A")) {
 
             if (this.x > 2) {
                 this.checkWalkCollisionLeft();
@@ -145,7 +145,7 @@ projekt.scene.Player.prototype.update = function (step) {
             }
         }
 
-        if (this.gamepad.pressed(0)) {
+        if (this.keyboard.pressed("SPACE")) {
             if (this.canJump == true && this.velocity.y >= 0) {
                 this.velocity.y = -7;
                 this.canJump = false;
@@ -164,15 +164,10 @@ projekt.scene.Player.prototype.update = function (step) {
     }
 
 
-     if (walking == true && this.alive == true && punching == false)  {
-         this.animation.gotoAndPlay("run");
-     }
-     else if(this.alive == true && punching == false) {
-         this.animation.gotoAndPlay("idle");
-     }
+    if (walking == true && this.alive == true && punching == false) {
+        this.animation.gotoAndPlay("run");
+    }
+    else if (this.alive == true && punching == false) {
+        this.animation.gotoAndPlay("idle");
+    }
 };
-
-
-
-
-

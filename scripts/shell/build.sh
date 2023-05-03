@@ -12,4 +12,8 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/Game.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
+--js "./../../src/scene/box/Box.js" \
+--js "./../../src/scene/player/Player.js"\
+--js "./../../src/scene/player/Player2.js"\
+--js "./../../src/scene/Menu/Menu.js"\
 --js_output_file "./../../dist/projekt.js";

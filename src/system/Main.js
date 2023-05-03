@@ -25,7 +25,7 @@ projekt.system.Main = function() {
         developer: "com.vectorpanic",
         app: "projekt",
         build: "1.0.0",
-        scene: projekt.scene.Game,
+        scene: projekt.scene.Menu,
         resources: projekt.data.Requests,
         useGamepads:true,
         useKeyboard:true,
