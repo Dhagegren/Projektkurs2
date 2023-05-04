@@ -40,7 +40,7 @@ projekt.scene.Menu.prototype.initGamepad = function(){
 
 projekt.scene.Menu.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
-    if (this.gamepad.pressed(9)) {
+    if (this.keyboard.pressed("SPACE")) {
         this.application.scenes.load([
             new projekt.scene.Game()
         ]);

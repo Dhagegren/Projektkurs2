@@ -2,7 +2,6 @@ projekt.scene.Player2 = function (x, y, width, height, resource, boxes, gamepad,
 
     rune.display.Sprite.call(this, x, y, width, height, resource);
 
-    this.hitbox.debug = true;
     this.hitbox.set(0, 0, 16, 16)
     this.speed = 4;
     this.gravity = 1;
@@ -12,9 +11,7 @@ projekt.scene.Player2 = function (x, y, width, height, resource, boxes, gamepad,
     this.alive = true;
     this.gamepad = gamepad;
     this.players = players;
-    console.log(this.players);
-
-
+  
     this.canJump = true;
 }
 
@@ -35,7 +32,7 @@ projekt.scene.Player2.prototype.setAnimation = function () {
 
 
 projekt.scene.Player2.prototype.checkWalkCollisionRight = function () {
-
+    
     this.boxes.forEachMember(function (box) {
         if (this.right >= box.left && this.bottom >= box.top + 2 && this.top <= box.bottom && this.right <= box.left + 3) {
             this.right = box.left - 3;
@@ -78,14 +75,12 @@ projekt.scene.Player2.prototype.checkCollision = function () {
         this.hitTest(box, function () {
             if (this.top < box.top && this.x < box.x + box.width - 5 && this.x + this.width > box.x + 5) {
                 this.velocity.y = 0;
-                this.bottom = box.top +1;
+                this.bottom = box.top -1;
                 this.canJump = true;
             }
         }, this);
     }, this)
 }
-
-
 
 
 projekt.scene.Player2.prototype.checkOnGround = function () {

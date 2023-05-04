@@ -3,7 +3,6 @@
 
     rune.display.Sprite.call(this,x,y, width, height,resource);
 
-    this.hitbox.debug= true;
     this.velocity.y = 1;
     this.floor = 190;
     this.boxes = boxes;

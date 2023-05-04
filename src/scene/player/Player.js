@@ -2,7 +2,6 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
 
     rune.display.Sprite.call(this, x, y, width, height, resource);
 
-    this.hitbox.debug = true;
     this.hitbox.set(0, 0, 16, 16)
     this.speed = 4;
     this.gravity = 1;
@@ -12,8 +11,6 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     this.alive = true; 
     this.gamepad = gamepad;
     this.players = players;
-    console.log(this.players);
-
 
     this.canJump = true;
 }
