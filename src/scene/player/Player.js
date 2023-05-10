@@ -102,9 +102,11 @@ projekt.scene.Player.prototype.checkPunch = function() {
             this.hitTest(player, function(){
                 if(player.flippedX == true){
                     player.x = this.x -35;
+                    player.velocity.x = -4;
                 }
                 else if(player.flippedX == false){
                     player.x = this.x +35;
+                    player.velocity.x = 4;
                 }
             },this)
         }
@@ -121,6 +123,8 @@ projekt.scene.Player.prototype.update = function (step) {
 
 
     if (this.alive == true) {
+
+    
 
     this.checkCollision();
     this.checkCrushCollision();
