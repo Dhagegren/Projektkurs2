@@ -13,7 +13,7 @@
  * 
  * Game scene.
  */
-projekt.scene.Game = function() {
+projekt.scene.Game = function(numPlayers) {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -26,6 +26,9 @@ projekt.scene.Game = function() {
 
 
     this.players = null;
+
+    //för att se hur många spelare som ska vara med
+    this.nrOfPlayers = numPlayers;
   
     
     /**
@@ -65,7 +68,7 @@ projekt.scene.Game.prototype.init = function() {
     this.timers = new rune.timer.Timers()
     this.timers.create(3,true);
    
-    this.m_initPlayers();
+    this.m_initPlayers(this.nrOfPlayers);
    
     
 };
@@ -100,19 +103,56 @@ projekt.scene.Game.prototype.m_initBox = function(){
   
 }
 
-projekt.scene.Game.prototype.m_initPlayers = function() {
-    var player = new projekt.scene.Player(10,205 ,16,16, "gubbeny2", this.boxes, this.gamepad, this.players);
+
+//Dogshit ska ändra detta till arv och skit
+projekt.scene.Game.prototype.initPlayer1 = function(){
+
+    var gamepad = this.gamepads.get(0);
+    var player = new projekt.scene.Player(10,205 ,16,16, "gubbeny2", this.boxes, gamepad, this.players);
     player.setAnimation();
     this.players.addMember(player);
-    this.stage.addChild(player);    
-    
+    this.stage.addChild(player); 
+}
 
 
-    var player2 = new projekt.scene.Player2(10,205 ,16,16, "spelare2", this.boxes , this.players);
+projekt.scene.Game.prototype.initPlayer2 = function(){
+
+    var gamepad = this.gamepads.get(1);
+    var player2 = new projekt.scene.Player(45,205 ,16,16, "spelare2", this.boxes ,  gamepad,this.players);
     player2.setAnimation();
     this.players.addMember(player2);
     this.stage.addChild(player2); 
-    
+}
+
+
+projekt.scene.Game.prototype.initPlayer3 = function(){
+    var gamepad = this.gamepads.get(2);
+    var player2 = new projekt.scene.Player(70,205 ,16,16, "spelare3", this.boxes ,  gamepad,this.players);
+    player2.setAnimation();
+    this.players.addMember(player2);
+    this.stage.addChild(player2); 
+}
+
+projekt.scene.Game.prototype.m_initPlayers = function() {
+    console.log(this.nrOfPlayers);
+
+    switch(this.nrOfPlayers){
+        case 0: 
+        this.initPlayer1();
+        break;
+
+        case 1: 
+        this.initPlayer1();
+        this.initPlayer2();
+        break;
+
+        case 2: 
+        this.initPlayer1();
+        this.initPlayer2();
+        this.initPlayer3();
+        break;
+    }
+        
 };
 
 /**

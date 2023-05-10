@@ -3,6 +3,7 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     rune.display.Sprite.call(this, x, y, width, height, resource);
 
     this.hitbox.set(0, 0, 16, 16)
+    this.hitbox.debug = true;
     this.speed = 4;
     this.gravity = 1;
     this.boxes = boxes
@@ -13,6 +14,7 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     this.players = players;
 
     this.canJump = true;
+    this.canDoubleJump = true;
 }
 
 projekt.scene.Player.prototype = Object.create(rune.display.Sprite.prototype);
@@ -26,7 +28,7 @@ projekt.scene.Player.prototype.setAnimation = function () {
     this.animation.create("idle", [0, 1], 4, true);
     this.animation.create("run", [0, 1, 2, 3, 4, 5, 6, 7, 8], 15, true);
     this.animation.create("death", [9, 10, 11], 1, true);
-    this.animation.create("punch", [12], 1, true );
+    this.animation.create("punch", [12], 50, false );
 
 }
 
@@ -75,8 +77,9 @@ projekt.scene.Player.prototype.checkWalkCollisionLeft = function () {
          this.hitTest(box, function () {
              if (this.top < box.top && this.x < box.x + box.width - 5 && this.x + this.width > box.x + 5) {
                  this.velocity.y = 0;
-                 this.bottom = box.top;
+                 this.bottom = box.top -1;
                  this.canJump = true;
+                 this.canDoubleJump = true;
              }
          }, this);
      }, this)
@@ -89,13 +92,36 @@ projekt.scene.Player.prototype.checkOnGround = function(){
 
     if(this.y == 205 || this.y == 204){
         this.canJump = true;
+        this.canDoubleJump = true;
     }
 }
+
+projekt.scene.Player.prototype.checkPunch = function() {
+    this.players.forEachMember(function(player) {
+        if(this.flippedX && this.x > player.x || !this.flippedX && this.x < player.x){
+            this.hitTest(player, function(){
+                if(player.flippedX == true){
+                    player.x = this.x -35;
+                }
+                else if(player.flippedX == false){
+                    player.x = this.x +35;
+                }
+            },this)
+        }
+        
+      
+    }, this);
+}
+
+
+
 
 projekt.scene.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
+
     if (this.alive == true) {
+
     this.checkCollision();
     this.checkCrushCollision();
     this.checkOnGround();
@@ -103,10 +129,6 @@ projekt.scene.Player.prototype.update = function (step) {
 
         var walking = false;
         var punching = false;
-
-        //this.checkCrushCollision();
-
-
       
         if (this.y > this.minY) {
             this.y = this.minY;
@@ -115,8 +137,9 @@ projekt.scene.Player.prototype.update = function (step) {
        
 
 
-        if(this.gamepad.pressed(2)){
+        if(this.gamepad.justPressed(2)){
             punching = true;
+            this.checkPunch();
             this.animation.gotoAndPlay("punch");
             
         }
@@ -147,6 +170,11 @@ projekt.scene.Player.prototype.update = function (step) {
                 this.velocity.y = -7;
                 this.canJump = false;
             }
+            else if (this.canJump == false && this.canDoubleJump == true && this.velocity.y >=0){
+                this.velocity.y = -7;
+                this.canDoubleJump = false;
+            }
+            
         }
 
 
