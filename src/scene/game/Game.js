@@ -64,7 +64,7 @@ projekt.scene.Game.prototype.init = function() {
     this.initGamepad();
 
     this.m_initbackGround();
-    this.m_initBox();
+    //this.m_initBox();
     this.timers = new rune.timer.Timers()
     this.timers.create(3,true);
    
@@ -139,11 +139,13 @@ projekt.scene.Game.prototype.m_initPlayers = function() {
     switch(this.nrOfPlayers){
         case 0: 
         this.initPlayer1();
+        this.initPlayer2();
         break;
 
         case 1: 
         this.initPlayer1();
         this.initPlayer2();
+        this.initPlayer3();
         break;
 
         case 2: 
