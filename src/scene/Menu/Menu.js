@@ -42,7 +42,7 @@ projekt.scene.Menu.prototype.update = function(step) {
         this.menus.down();
     }
 
-    if(this.keyboard.stickLeftUp){
+    if(this.gamepad.stickLeftUp){
         this.menus.up();
     }
 
