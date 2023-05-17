@@ -14,6 +14,8 @@ npx google-closure-compiler \
 --js "./../../src/scene/box/Box.js" \
 --js "./../../src/scene/player/Player.js"\
 --js "./../../src/scene/player/Player1.js"\
+--js "./../../src/scene/player/Player2.js"\
+--js "./../../src/scene/player/Player3.js"\
 --js "./../../src/scene/Menu/Menus.js"\
 --js "./../../src/scene/Menu/Menu.js"\
 --js "./../../src/scope/Alias.js" \

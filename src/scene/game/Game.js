@@ -22,6 +22,8 @@ projekt.scene.Game = function(numPlayers) {
     this.boxes = null;
     this.background=null;
     this.posArr = [10, 42, 74, 106, 138,170,202,234, 266,298,330, 362];
+    this.columnsCounts =  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
     this.gamepad = null;
 
 
@@ -29,6 +31,8 @@ projekt.scene.Game = function(numPlayers) {
 
     //för att se hur många spelare som ska vara med
     this.nrOfPlayers = numPlayers;
+
+    this.longestSurvivor = null;
   
     
     /**
@@ -57,6 +61,8 @@ projekt.scene.Game.prototype.constructor = projekt.scene.Game;
 projekt.scene.Game.prototype.init = function() {
     rune.scene.Scene.prototype.init.call(this);
 
+
+
     this.boxes = this.groups.create(this.stage);
     this.players = this.groups.create(this.stage);
 
@@ -73,21 +79,89 @@ projekt.scene.Game.prototype.init = function() {
     
 };
 
+projekt.scene.Game.prototype.gameOver = function(){
+    console.log("GAME OVER");
+}
 
 
-projekt.scene.Game.prototype.m_initBox = function(){
+
+// projekt.scene.Game.prototype.m_initBox = function(){
   
    
    
-    var rand = Math.floor(Math.random()*12);
-    var randomValue = this.posArr[rand];
+//     var rand = Math.floor(Math.random()*12);
+//     var randomValue = this.posArr[rand];
    
     
-    var box = new projekt.scene.Box(randomValue, 0, 32,32,"box", this.boxes);
+//     var box = new projekt.scene.Box(randomValue, 0, 32,32,"box", this.boxes);
+//     this.boxes.addMember(box);
+//     this.stage.addChild(box);
+   
+// }
+
+
+  
+
+  
+
+  
+projekt.scene.Game.prototype.m_initBox = function() {
+    var lowestColumns = [];
+    var i;
+    var lowestCount = Infinity;
+
+    for (i = 0; i < 12; i++) {
+      if (this.columnsCounts[i] < lowestCount) {
+        lowestCount = this.columnsCounts[i];
+      }
+    }
+  
+    for (i = 0; i < 12; i++) {
+      if (this.columnsCounts[i] === lowestCount) {
+        lowestColumns.push(i);
+      }
+    }
+  
+    var randCol;
+    if (lowestColumns.length > 0 && Math.random() < 0.25) {
+      randCol = lowestColumns[Math.floor(Math.random() * lowestColumns.length)];
+    } else {
+      var columnsToExclude = [];
+      for (i = 0; i < 12; i++) {
+        if (this.columnsCounts[i] >= 7) {
+          columnsToExclude.push(i);
+        }
+      }
+      do {
+        randCol = Math.floor(Math.random() * 12);
+      } while (columnsToExclude.includes(randCol));
+    }
+  
+    var randomValue = this.posArr[randCol];
+  
+    var box = new projekt.scene.Box(randomValue, 0, 32, 32, "box", this.boxes);
     this.boxes.addMember(box);
     this.stage.addChild(box);
-   
-}
+  
+    this.columnsCounts[randCol]++;
+  
+    var fullColumns = [];
+    for (i = 0; i < 12; i++) {
+      if (this.columnsCounts[i] >= 7) {
+        fullColumns.push(i);
+      }
+    }
+  
+    if (fullColumns.length >= 12) {
+      this.gameOver();
+      this.application.scenes.load([
+        new projekt.scene.Menu()
+    ]);
+    }
+  };
+  
+  
+  
 
  projekt.scene.Game.prototype.m_initbackGround = function(){
 
@@ -104,33 +178,38 @@ projekt.scene.Game.prototype.m_initBox = function(){
 }
 
 
+
+
+
 //Dogshit ska ändra detta till arv och skit
 projekt.scene.Game.prototype.initPlayer1 = function(){
 
     var gamepad = this.gamepads.get(0);
-    var player = new projekt.scene.Player(10,205 ,16,16, "gubbeny2", this.boxes, gamepad, this.players);
-    player.setAnimation();
-    this.players.addMember(player);
-    this.stage.addChild(player); 
+    var player1 = new projekt.scene.Player1(this.boxes,gamepad,this.players);
+    player1.setAnimation();
+    this.players.addMember(player1);
+    this.stage.addChild(player1); 
 }
 
 
 projekt.scene.Game.prototype.initPlayer2 = function(){
 
     var gamepad = this.gamepads.get(1);
-    var player2 = new projekt.scene.Player(45,205 ,16,16, "spelare2", this.boxes ,  gamepad,this.players);
+    var player2 = new projekt.scene.Player2(this.boxes,gamepad,this.players);
     player2.setAnimation();
     this.players.addMember(player2);
     this.stage.addChild(player2); 
 }
 
 
+
+
 projekt.scene.Game.prototype.initPlayer3 = function(){
     var gamepad = this.gamepads.get(2);
-    var player2 = new projekt.scene.Player(70,205 ,16,16, "spelare3", this.boxes ,  gamepad,this.players);
-    player2.setAnimation();
-    this.players.addMember(player2);
-    this.stage.addChild(player2); 
+    var player3 = new projekt.scene.Player3(this.boxes,gamepad,this.players);
+    player3.setAnimation();
+    this.players.addMember(player3);
+    this.stage.addChild(player3); 
 }
 
 projekt.scene.Game.prototype.m_initPlayers = function() {
@@ -167,6 +246,9 @@ projekt.scene.Game.prototype.m_initPlayers = function() {
  */
 projekt.scene.Game.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
+
+
+  
   
      if(this.timers.m_timers[0].elapsed >966 ){
         this.m_initBox();
@@ -181,11 +263,30 @@ projekt.scene.Game.prototype.update = function(step) {
     }
 
 
-    // if(this.timers.m_timers.complete){
-    //     this.m_initBox();
-    //     this.timers.m_timers.restart();
-    // }
-   
+    var alivePlayers = [];
+    this.players.forEachMember(function(player) {
+        
+        if (player.alive) {
+            alivePlayers.push(player);
+        }
+    }, this);
+
+    if (alivePlayers.length === 0) {
+        // All players are dead
+        var longestSurvivalTime = 0;
+        console.log("Checking longest survivor...");
+
+        this.players.forEachMember(function(player) {
+            if (player.survivalTime > longestSurvivalTime) {
+                this.longestSurvivor = player;
+                longestSurvivalTime = player.survivalTime;
+                console.log("New longest survivor:", this.longestSurvivor);
+            }
+        }, this);
+
+        console.log("Longest survivor:", this.longestSurvivor);
+       // this.endMatch(this.longestSurvivor);
+    }
     
 };
 
