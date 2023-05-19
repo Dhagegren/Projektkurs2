@@ -10,6 +10,7 @@ npx google-closure-compiler \
 --js "./../../src/scope/Manifest.js" \
 --js "./../../src/data/resource/Requests.js" \
 --js "./../../src/scene/game/Game.js" \
+--js "./../../src/scene/gameover/GameOver.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scene/box/Box.js" \
 --js "./../../src/scene/player/Player.js"\

@@ -16,11 +16,14 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     this.canJump = true;
     this.canDoubleJump = true;
 
+    this.canControl = true;
+
+    
+
 }
 
 projekt.scene.Player.prototype = Object.create(rune.display.Sprite.prototype);
 projekt.scene.Player.prototype.constructor = projekt.scene.Player;
-
 
 
 
@@ -128,7 +131,7 @@ projekt.scene.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
 
-    if (this.alive == true) {
+    if (this.alive == true && this.canControl == true)  {
 
 
         this.checkWalkCollisionRight();
