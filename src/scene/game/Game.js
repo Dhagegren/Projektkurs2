@@ -197,6 +197,14 @@ projekt.scene.Game.prototype.initPlayer3 = function () {
   this.stage.addChild(player3);
 }
 
+projekt.scene.Game.prototype.initPlayer4 = function () {
+  var gamepad = this.gamepads.get(3);
+  var player4 = new projekt.scene.Player4(this.boxes, gamepad, this.players);
+  player4.setAnimation();
+  this.players.addMember(player4);
+  this.stage.addChild(player4);
+}
+
 
 
 
@@ -219,7 +227,9 @@ projekt.scene.Game.prototype.m_initPlayers = function () {
       this.initPlayer1();
       this.initPlayer2();
       this.initPlayer3();
+      this.initPlayer4();
       break;
+
   }
 
 };

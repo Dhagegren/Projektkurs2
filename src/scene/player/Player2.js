@@ -1,6 +1,6 @@
 projekt.scene.Player2 = function(boxes, gamepad, players){
 
-    projekt.scene.Player.call( this,60, 20, 16, 16, "spelare2", boxes, gamepad, players );
+    projekt.scene.Player.call( this,370, 20, 16, 16, "spelare2", boxes, gamepad, players );
 
 
     

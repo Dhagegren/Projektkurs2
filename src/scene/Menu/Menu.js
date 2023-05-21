@@ -75,21 +75,27 @@ projekt.scene.Menu.prototype.update = function(step) {
          switch(selected){
              case 0: 
              this.application.scenes.load([
-                 new projekt.scene.Game(1)
+                 new projekt.scene.Game(0)
              ])
              break;
              case 1:
                 this.application.scenes.load([
-                    new projekt.scene.Game(2)
+                    new projekt.scene.Game(1)
                 ])
                 break;
                 case 2:
                     this.application.scenes.load([
-                        new projekt.scene.Game(3)
+                        new projekt.scene.Game(2)
                     ])
                     break;
-
+                
                     case 3:
+                        this.application.scenes.load([
+                            new projekt.scene.Game(3)
+                        ])
+                        break;
+
+                    case 4:
                         this.application.scenes.load([
                             new projekt.scene.HowToPlay()
                         ])

@@ -19,7 +19,6 @@ projekt.scene.Box.prototype.init = function(){
   rune.display.Sprite.prototype.init.call(this);
 
   this.initSound();
-  console.log(this.sound);
 }
 
 
