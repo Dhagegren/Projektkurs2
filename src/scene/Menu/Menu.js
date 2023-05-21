@@ -4,6 +4,7 @@ projekt.scene.Menu = function(){
     this.gamepad = null;
 
     this.menus = new projekt.scene.Menus();
+    this.musik = null;
 }
 
 projekt.scene.Menu.prototype = Object.create(rune.scene.Scene.prototype);
@@ -15,17 +16,28 @@ projekt.scene.Menu.prototype.init = function(){
     rune.scene.Scene.prototype.init.call(this);
     this.initGamepad();
     this.initbackGround();
+    this.initMusic();
 
 
         this.menus.add("2-Player");
         this.menus.add("3-Player")
         this.menus.add("4-Player");
+        this.menus.add("How to play");
    
 
 
     this.menus.center = this.application.screen.center;
     this.stage.addChild(this.menus);
 
+}
+
+
+projekt.scene.Menu.prototype.initMusic = function(){
+    this.musik = new rune.media.Sounds(); 
+    this.musik.music.clear();
+    this.musik.music.get("Musik", "unique");
+    this.musik.music.volume = 0.1;
+    this.musik.music.m_sounds[0].play(true);  
 }
 
 
@@ -46,20 +58,48 @@ projekt.scene.Menu.prototype.initGamepad = function(){
 projekt.scene.Menu.prototype.update = function(step) {
     rune.scene.Scene.prototype.update.call(this, step);
   
-    if(this.gamepad.stickLeftDown){
+    if(this.gamepad.justPressed(13)){
         this.menus.down();
     }
 
-    if(this.gamepad.stickLeftUp){
+    if(this.gamepad.justPressed(12)){
         this.menus.up();
     }
 
     if(this.gamepad.justPressed(2)){
         this.menus.select();
+
+        var selected = this.menus.m_index;
+        console.log(selected);
+
+         switch(selected){
+             case 0: 
+             this.application.scenes.load([
+                 new projekt.scene.Game(1)
+             ])
+             break;
+             case 1:
+                this.application.scenes.load([
+                    new projekt.scene.Game(2)
+                ])
+                break;
+                case 2:
+                    this.application.scenes.load([
+                        new projekt.scene.Game(3)
+                    ])
+                    break;
+
+                    case 3:
+                        this.application.scenes.load([
+                            new projekt.scene.HowToPlay()
+                        ])
+                        break;
+                
+         }
    
-        var selectedPlayers = this.menus.m_index;
-         this.application.scenes.load([
-              new projekt.scene.Game(selectedPlayers)
-          ]);
+        //var selectedPlayers = this.menus.m_index;
+        //  this.application.scenes.load([
+        //       new projekt.scene.Game(selectedPlayers)
+        //   ]);
     }
 };
