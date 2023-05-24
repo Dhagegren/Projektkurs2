@@ -13,13 +13,14 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     this.gamepad = gamepad;
     this.players = players;
 
+
+    this.punch =  this.application.sounds.sound.get("punchsound", "unique");
+ 
+
     this.canJump = true;
     this.canDoubleJump = true;
 
     this.canControl = true;
-    this.punch = null;
-
-    
 
 }
 
@@ -30,7 +31,6 @@ projekt.scene.Player.prototype.constructor = projekt.scene.Player;
 projekt.scene.Player.prototype.init = function(){
     rune.display.Sprite.prototype.init.call(this);
 
-    this.initPunch();
 }
 
 
@@ -43,11 +43,6 @@ projekt.scene.Player.prototype.setAnimation = function () {
 }
 
 
-projekt.scene.Player.prototype.initPunch = function(){
-    this.punch = new rune.media.Sounds();
-    this.punch.sound.get("punchsound", "shared");
-    this.punch.sound.volume = 0.3; 
-}
 
 
 projekt.scene.Player.prototype.checkWalkCollisionRight = function () {
@@ -120,13 +115,13 @@ projekt.scene.Player.prototype.checkPunch = function() {
         if (this.flippedX && this.x > player.x || !this.flippedX && this.x < player.x) {
             this.hitTest(player, function() {
                 if (this.flippedX == true) {
-                    this.punch.sound.m_sounds[0].play(); 
+                    this.punch.play();
                     player.velocity.x = -3;
                     this.resetVelocity(player, 200); 
                     
 
                 } else if (this.flippedX == false) {
-                    this.punch.sound.m_sounds[0].play(); 
+                    this.punch.play();
                     player.velocity.x = 3;
                     this.resetVelocity(player, 200); 
                     

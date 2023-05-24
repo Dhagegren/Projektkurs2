@@ -33,11 +33,10 @@ projekt.scene.Menu.prototype.init = function(){
 
 
 projekt.scene.Menu.prototype.initMusic = function(){
-    this.musik = new rune.media.Sounds(); 
-    this.musik.music.clear();
-    this.musik.music.get("Musik", "unique");
-    this.musik.music.volume = 0.1;
-    this.musik.music.m_sounds[0].play(true);  
+   
+   var musika =  this.application.sounds.master.get("Musik", "unique");
+  musika.volume = 0.3;
+  musika.play();
 }
 
 
@@ -88,14 +87,9 @@ projekt.scene.Menu.prototype.update = function(step) {
                         new projekt.scene.Game(2)
                     ])
                     break;
-                
-                    case 3:
-                        this.application.scenes.load([
-                            new projekt.scene.Game(3)
-                        ])
-                        break;
+               
 
-                    case 4:
+                    case 3:
                         this.application.scenes.load([
                             new projekt.scene.HowToPlay()
                         ])
