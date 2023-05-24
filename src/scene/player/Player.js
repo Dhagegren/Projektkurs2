@@ -85,7 +85,7 @@ projekt.scene.Player.prototype.checkCrushCollision = function () {
 projekt.scene.Player.prototype.checkCollision = function () {
     this.boxes.forEachMember(function (box) {
         this.hitTest(box, function () {
-            if (this.top < box.top && this.x < box.x + box.width - 3 && this.x + this.width > box.x + 3) {
+            if (this.top < box.top && this.x < box.x + box.width - 1 && this.x + this.width > box.x + 1) {
                 this.velocity.y = 0;
                 this.bottom = box.top - 1;
                 this.canJump = true;
