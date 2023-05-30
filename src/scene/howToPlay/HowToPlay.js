@@ -1,7 +1,19 @@
+//------------------------------------------------------------------------------
+// Constructor scope
+//------------------------------------------------------------------------------
+
+/**
+ * Creates a new object.
+ *
+ * @constructor
+ * @extends rune.scene.Scene
+ *
+ * @class
+ * @classdesc
+ * 
+ * HowToPlay scene.
+ */
 projekt.scene.HowToPlay = function () {
-
-
-
 
 
     this.gamepad = null;
@@ -13,7 +25,12 @@ projekt.scene.HowToPlay.prototype = Object.create(rune.scene.Scene.prototype);
 projekt.scene.HowToPlay.prototype.constructor = projekt.scene.HowToPlay;
 
 
-
+/**
+ * 
+ * Function that calls all the methods once
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.HowToPlay.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
 
@@ -22,10 +39,24 @@ projekt.scene.HowToPlay.prototype.init = function () {
 
 };
 
+
+/**
+ * Gets the gamepad
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.HowToPlay.prototype.initGamepad = function () {
     this.gamepad = this.gamepads.get(0);
 }
 
+
+/**
+ * 
+ * Initializes the background for the how to play page
+ * 
+ * @returns {undefined}
+ * 
+ */
 projekt.scene.HowToPlay.prototype.initBackground = function(){
     var howtoplay = new rune.display.Sprite(0, 0, 400, 250, "Howtoplay");
     this.stage.addChild(howtoplay);
@@ -35,6 +66,14 @@ projekt.scene.HowToPlay.prototype.initBackground = function(){
 
 
 
+/**
+ * This method is automatically executed once per "tick". The method is used for 
+ * calculations such as application logic.
+ *
+ * @param {number} step Fixed time step.
+ *
+ * @returns {undefined}
+ */
 projekt.scene.HowToPlay.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 

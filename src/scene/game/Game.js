@@ -23,17 +23,10 @@ projekt.scene.Game = function (numPlayers) {
   this.background = null;
   this.posArr = [10, 42, 74, 106, 138, 170, 202, 234, 266, 298, 330, 362];
   this.columnsCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
   this.gamepad = null;
-
-
   this.players = null;
-
-  //för att se hur många spelare som ska vara med
   this.nrOfPlayers = numPlayers;
-
-
-  this.deathOrder = []; // Array to store the order of deaths
+  this.deathOrder = [];
 
 
   /**
@@ -69,17 +62,21 @@ projekt.scene.Game.prototype.init = function () {
 
 
   this.initGamepad();
-
-  this.m_initbackGround();
-  //this.m_initBox();
+  this.initBackground();
   this.timers = new rune.timer.Timers()
   this.timers.create(3, true);
-
-  this.m_initPlayers(this.nrOfPlayers);
-
-
+  this.initPlayers(this.nrOfPlayers);
 };
 
+
+/**
+ * 
+ * @param {object} winner 
+ * 
+ * Function runs when the game is over and loads the GameOver scene
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.Game.prototype.gameOver = function (winner) {
   this.application.scenes.load([
     new projekt.scene.GameOver(winner)
@@ -88,8 +85,13 @@ projekt.scene.Game.prototype.gameOver = function (winner) {
 
 
 
-
-projekt.scene.Game.prototype.m_initBox = function () {
+/**
+ * 
+ * initializes the boxes and starts the sequence of the dropping
+ * 
+ * @returns {undefined}
+ */
+projekt.scene.Game.prototype.initBox = function () {
   var lowestColumns = [];
   var i;
   var lowestCount = Infinity;
@@ -146,8 +148,14 @@ projekt.scene.Game.prototype.m_initBox = function () {
 
 
 
-
-projekt.scene.Game.prototype.m_initbackGround = function () {
+/**
+ * 
+ * Initializes the background picture for the game scene
+ * 
+ * @returns {undefined}
+ * 
+ */
+projekt.scene.Game.prototype.initBackground = function () {
 
   var background = new rune.display.Sprite(0, 0, 400, 250, "Bakgrund");
   this.stage.addChild(background);
@@ -155,7 +163,11 @@ projekt.scene.Game.prototype.m_initbackGround = function () {
 }
 
 
-
+/**
+ * Gets the gamepad
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.Game.prototype.initGamepad = function () {
 
   this.gamepad = this.gamepads.get(0);
@@ -166,7 +178,12 @@ projekt.scene.Game.prototype.initGamepad = function () {
 
 
 
-//Dogshit ska ändra detta till arv och skit
+/**
+ * 
+ * Function to initialize the players
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.Game.prototype.initPlayer1 = function () {
 
   var gamepad = this.gamepads.get(0);
@@ -176,7 +193,12 @@ projekt.scene.Game.prototype.initPlayer1 = function () {
   this.stage.addChild(player1);
 }
 
-
+/**
+ * 
+ * Function to initialize the players
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.Game.prototype.initPlayer2 = function () {
 
   var gamepad = this.gamepads.get(1);
@@ -188,7 +210,12 @@ projekt.scene.Game.prototype.initPlayer2 = function () {
 
 
 
-
+/**
+ * 
+ * Function to initialize the players
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.Game.prototype.initPlayer3 = function () {
   var gamepad = this.gamepads.get(2);
   var player3 = new projekt.scene.Player3(this.boxes, gamepad, this.players);
@@ -197,6 +224,12 @@ projekt.scene.Game.prototype.initPlayer3 = function () {
   this.stage.addChild(player3);
 }
 
+/**
+ * 
+ * Function to initialize the players
+ * 
+ * @returns {undefined}
+ */
 projekt.scene.Game.prototype.initPlayer4 = function () {
   var gamepad = this.gamepads.get(3);
   var player4 = new projekt.scene.Player4(this.boxes, gamepad, this.players);
@@ -208,8 +241,14 @@ projekt.scene.Game.prototype.initPlayer4 = function () {
 
 
 
-
-projekt.scene.Game.prototype.m_initPlayers = function () {
+/**
+ * 
+ * Checks how many players the user have chosen and initialazis them
+ * 
+ * @returns {undefined}
+ * 
+ */
+projekt.scene.Game.prototype.initPlayers = function () {
 
   switch (this.nrOfPlayers) {
     case 0:
@@ -254,7 +293,7 @@ projekt.scene.Game.prototype.update = function (step) {
 
 
   if (this.timers.m_timers[0].elapsed > 966) {
-    this.m_initBox();
+    this.initBox();
     this.timers.m_timers[0].restart();
   }
 

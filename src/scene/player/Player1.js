@@ -1,6 +1,18 @@
-projekt.scene.Player1 = function(boxes, gamepad, players){
 
-    projekt.scene.Player.call( this,20, 20, 16, 16, "gubbeny2", boxes, gamepad, players );
+/**
+ * Creates a new object.
+ *
+ * @constructor
+ * @extends projekt.scene.Player
+ *
+ * @class
+ * @classdesc
+ * 
+ * Player1 scene.
+ */
+projekt.scene.Player1 = function (boxes, gamepad, players) {
+
+    projekt.scene.Player.call(this, 20, 20, 16, 16, "gubbeny2", boxes, gamepad, players);
 
 
     this.name = "Spelare 1";

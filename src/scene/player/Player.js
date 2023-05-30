@@ -1,3 +1,16 @@
+
+/**
+ * Creates a new object.
+ *
+ * @constructor
+ * @extends rune.display.Sprite
+ *
+ * @class
+ * @classdesc
+ * 
+ * Player scene.
+ */
+
 projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, players) {
 
     rune.display.Sprite.call(this, x, y, width, height, resource);
@@ -14,8 +27,8 @@ projekt.scene.Player = function (x, y, width, height, resource, boxes, gamepad, 
     this.players = players;
 
 
-    this.punch =  this.application.sounds.sound.get("punchsound", "unique");
- 
+    this.punch = this.application.sounds.sound.get("punchsound", "unique");
+
 
     this.canJump = true;
     this.canDoubleJump = true;
@@ -28,12 +41,14 @@ projekt.scene.Player.prototype = Object.create(rune.display.Sprite.prototype);
 projekt.scene.Player.prototype.constructor = projekt.scene.Player;
 
 
-projekt.scene.Player.prototype.init = function(){
-    rune.display.Sprite.prototype.init.call(this);
-
-}
 
 
+/**
+ * 
+ * Method that sets the animation for the player sprite
+ * 
+ * 
+ */
 projekt.scene.Player.prototype.setAnimation = function () {
     this.animation.create("idle", [0, 1], 4, true);
     this.animation.create("run", [0, 1, 2, 3, 4, 5, 6, 7, 8], 15, true);
@@ -44,7 +59,11 @@ projekt.scene.Player.prototype.setAnimation = function () {
 
 
 
-
+/**
+ * 
+ * Checks if the players collides with a box from the right
+ * 
+ */
 projekt.scene.Player.prototype.checkWalkCollisionRight = function () {
 
     this.boxes.forEachMember(function (box) {
@@ -54,6 +73,12 @@ projekt.scene.Player.prototype.checkWalkCollisionRight = function () {
     }, this)
 }
 
+
+/**
+ * 
+ * Checks if the players collides with a box from the left
+ * 
+ */
 projekt.scene.Player.prototype.checkWalkCollisionLeft = function () {
     this.boxes.forEachMember(function (box) {
         if (this.left <= box.right && this.bottom >= box.top + 2 && this.top <= box.bottom && this.left >= box.right - 3) {
@@ -62,6 +87,12 @@ projekt.scene.Player.prototype.checkWalkCollisionLeft = function () {
     }, this)
 }
 
+
+/**
+ * 
+ * Checks if the players gets crushed by a box
+ * 
+ */
 projekt.scene.Player.prototype.checkCrushCollision = function () {
 
     this.boxes.forEachMember(function (box) {
@@ -81,7 +112,11 @@ projekt.scene.Player.prototype.checkCrushCollision = function () {
 }
 
 
-
+/**
+ * 
+ * Checks if the player lands on a box
+ * 
+ */
 projekt.scene.Player.prototype.checkCollision = function () {
     this.boxes.forEachMember(function (box) {
         this.hitTest(box, function () {
@@ -97,7 +132,9 @@ projekt.scene.Player.prototype.checkCollision = function () {
 
 
 
-
+/**
+ * Checks if the player is on the ground and resets the jump and canDoubleJump
+ */
 projekt.scene.Player.prototype.checkOnGround = function () {
 
     if (this.y == 205 || this.y == 204) {
@@ -109,50 +146,88 @@ projekt.scene.Player.prototype.checkOnGround = function () {
 
 
 
-//Slagen borde fungera nu.
-projekt.scene.Player.prototype.checkPunch = function() {
-    this.players.forEachMember(function(player) {
+/**
+ * Checks if a players gets punched by another player
+ */
+projekt.scene.Player.prototype.checkPunch = function () {
+    this.players.forEachMember(function (player) {
         if (this.flippedX && this.x > player.x || !this.flippedX && this.x < player.x) {
-            this.hitTest(player, function() {
+            this.hitTest(player, function () {
                 if (this.flippedX == true) {
                     this.punch.play();
                     player.velocity.x = -3;
-                    this.resetVelocity(player, 200); 
-                    
+                    this.resetVelocity(player, 200);
+
 
                 } else if (this.flippedX == false) {
                     this.punch.play();
                     player.velocity.x = 3;
-                    this.resetVelocity(player, 200); 
-                    
+                    this.resetVelocity(player, 200);
+
                 }
             }, this);
         }
     }, this);
 };
 
-projekt.scene.Player.prototype.resetVelocity = function(player, delay) {
-    setTimeout(function() {
+
+/**
+ * 
+ * resets the players velocity after the timeout so the players flies a bit from the punch and then stops
+ * 
+ * @param {object} player 
+ * @param {number} delay 
+ */
+projekt.scene.Player.prototype.resetVelocity = function (player, delay) {
+    setTimeout(function () {
         player.velocity.x = 0;
     }, delay);
 };
 
 
+/**
+ * 
+ * Checks if the player tries to walk of screen
+ */
+projekt.scene.Player.prototype.checkOffScreen = function () {
 
+    if (this.x < 3) {
+        this.x = 3;
+    }
+    else if (this.x > 379) {
+        this.x = 379;
+    }
+}
+
+
+
+
+/**
+ * This method is automatically executed once per "tick". The method is used for 
+ * calculations such as application logic.
+ *
+ * @param {number} step Fixed time step.
+ *
+ * @returns {undefined}
+ * 
+ * Call methods to check what happens to the player and checks for the movement of the player.
+ * 
+ */
 projekt.scene.Player.prototype.update = function (step) {
     rune.display.Sprite.prototype.update.call(this, step);
 
 
-    if (this.alive == true && this.canControl == true)  {
+    if (this.alive == true && this.canControl == true) {
 
 
+        this.checkOffScreen()
         this.checkWalkCollisionRight();
         this.checkWalkCollisionLeft();
         this.checkCollision();
         this.checkCrushCollision();
         this.checkOnGround();
 
-       
+
 
         var walking = false;
         var punching = false;
@@ -171,21 +246,16 @@ projekt.scene.Player.prototype.update = function (step) {
 
 
         if (this.gamepad.stickLeftRight) {
-            if (this.x < 380) {
-                this.x += this.speed;
-                this.flippedX = false;
-                walking = true;
-            }
+            this.x += this.speed;
+            this.flippedX = false;
+            walking = true;
 
         }
 
         if (this.gamepad.stickLeftLeft) {
-
-            if (this.x > 2) {
-                this.x += -this.speed;
-                this.flippedX = true;
-                walking = true;
-            }
+            this.x += -this.speed;
+            this.flippedX = true;
+            walking = true;
         }
 
         if (this.gamepad.pressed(0)) {
